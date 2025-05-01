@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineStream - Watch Iron Man 3</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Custom CSS for video player and animations */
+        .hero-section {
+            background-image: url('https://image.tmdb.org/t/p/original/iVped1djsF0tvGkvnHbzsE3ZPTF.jpg');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            position: relative;
+        }
+        
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+        }
+        
+        .video-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            max-width: 1000px;
+            aspect-ratio: 16/9;
+            overflow: hidden;
+            display: none;
+            z-index: 20;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+            border-radius: 8px;
+        }
+        
+        .video-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(229, 9, 20, 0.8);
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+        
+        .play-button:hover {
+            background: rgba(229, 9, 20, 1);
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+        
+        .hover-scale {
+            transition: transform 0.2s ease;
+        }
+        
+        .hover-scale:hover {
+            transform: scale(1.05);
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .lights-off {
+            background-color: #000;
+        }
+        
+        .lights-off .hero-overlay,
+        .lights-off .hero-content,
+        .lights-off nav,
+        .lights-off #movieInfo,
+        .lights-off section,
+        .lights-off footer {
+            display: none;
+        }
+        
+        .lights-off .video-container {
+            display: block;
+        }
+        
+        .tv-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        /* Custom TV icon animation */
+        .tv-icon {
+            position: relative;
+            width: 20px;
+            height: 16px;
+            background: #fff;
+            border-radius: 2px;
+        }
+        
+        .tv-icon:before {
+            content: '';
+            position: absolute;
+            top: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 8px;
+            height: 2px;
+            background: #fff;
+            border-radius: 2px 2px 0 0;
+        }
+        
+        .tv-icon:after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 12px;
+            height: 2px;
+            background: #fff;
+            border-radius: 0 0 2px 2px;
+        }
+        
+        .tv-icon-on {
+            animation: tvStatic 0.2s infinite alternate;
+        }
+        
+        @keyframes tvStatic {
+            0% { opacity: 0.8; }
+            100% { opacity: 1; }
+        }
+        
+        /* Custom movie poster frame */
+        .movie-poster-frame {
+            border: 4px solid #2d3748;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            overflow: hidden;
+            width: 120px;
+            height: 180px;
+        }
+        
+        .movie-poster {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+            border-radius: 8px;
+        }
+        
+        .movie-poster:hover {
+            transform: scale(1.03);
+        }
+        
+        /* Hero content adjustments */
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 4px;
+        }
+        
+        /* Movie info flex layout */
+        .movie-info-container {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            width: 100%;
+        }
+        
+        .movie-details {
+            flex: 1;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white">
+    <!-- Navigation -->
+    <nav class="bg-black bg-opacity-90 fixed w-full z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-8">
+                <a href="#" class="text-red-600 font-bold text-2xl">CineStream</a>
+                <div class="hidden md:flex space-x-6">
+                    <a href="#" class="hover:text-gray-300">Home</a>
+                    <a href="#" class="hover:text-gray-300">Movies</a>
+                    <a href="#" class="hover:text-gray-300">TV Shows</a>
+                    <a href="#" class="hover:text-gray-300">New & Popular</a>
+                    <a href="#" class="hover:text-gray-300">My List</a>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="relative">
+                    <input type="text" placeholder="Search" class="bg-gray-800 px-4 py-1 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-red-500 w-0 md:w-48 transition-all duration-300 opacity-0 md:opacity-100">
+                    <button class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 md:hidden">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button class="text-gray-300 hover:text-white">
+                        <i class="fas fa-bell"></i>
+                    </button>
+                    <div class="w-8 h-8 rounded-full bg-red-600 flex items-center justify-center">
+                        <span class="text-sm font-medium">JS</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section with Movie Poster -->
+    <section class="hero-section" id="heroSection">
+        <div class="hero-overlay"></div>
+        <div class="tv-toggle" id="tvToggle">
+            <div class="tv-icon" id="tvIcon"></div>
+        </div>
+        
+        <div class="hero-content">
+            <h1 class="text-5xl font-bold mb-4">Iron Man 3</h1>
+            <div class="flex items-center justify-center space-x-6 mb-8">
+                <span class="text-red-500 font-medium">78% Match</span>
+                <span>2013</span>
+                <span class="bg-gray-800 px-2 py-1 rounded text-sm">PG-13</span>
+                <span>2h 10m</span>
+                <span class="flex items-center">
+                    <i class="fas fa-star text-yellow-400 mr-1"></i>
+                    7.1
+                </span>
+                <span>HD</span>
+            </div>
+            
+            <p class="max-w-2xl text-lg mb-8">
+                When Tony Stark's world is torn apart by a formidable terrorist called the Mandarin, he starts an odyssey of rebuilding and retribution.
+            </p>
+            
+            <div class="play-button" id="playButton">
+                <i class="fas fa-play text-3xl"></i>
+            </div>
+        </div>
+        
+        <!-- Video Player (hidden initially) -->
+        <div class="video-container" id="videoContainer">
+            <iframe id="moviePlayer", src="" allowfullscreen></iframe>
+        </div>
+    </section>
+
+    <!-- Movie Info Below Player -->
+    <section id="movieInfo" class="container mx-auto px-4 py-6">
+        <div class="movie-info-container">
+            <div class="movie-poster-frame">
+                <img src="https://image.tmdb.org/t/p/w500/qhPtAc1TKbMPqNvcdXSOn9Bn7hZ.jpg" alt="Iron Man 3 Poster" class="movie-poster">
+            </div>
+            <div class="movie-details">
+                <div class="flex justify-between items-center mb-4">
+                    <div>
+                        <h2 class="text-2xl font-bold">Iron Man 3</h2>
+                        <p class="text-gray-400">2h 10m • 2013 • PG-13</p>
+                    </div>
+                    <div class="flex space-x-4">
+                        <button class="bg-gray-800 bg-opacity-70 p-2 rounded-full hover:bg-opacity-100 transition">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                        <button class="bg-gray-800 bg-opacity-70 p-2 rounded-full hover:bg-opacity-100 transition">
+                            <i class="fas fa-share-alt"></i>
+                        </button>
+                        <button class="bg-gray-800 bg-opacity-70 p-2 rounded-full hover:bg-opacity-100 transition">
+                            <i class="fas fa-thumbs-up"></i>
+                        </button>
+                    </div>
+                </div>
+                <p class="text-gray-300 mb-4">
+                    When Tony Stark's world is torn apart by a formidable terrorist called the Mandarin, he starts an odyssey of rebuilding and retribution. Starring Robert Downey Jr., Gwyneth Paltrow, Don Cheadle.
+                </p>
+                <div class="flex flex-wrap gap-4">
+                    <div>
+                        <p class="text-gray-400">Director:</p>
+                        <p>Shane Black</p>
+                    </div>
+                    <div>
+                        <p class="text-gray-400">Cast:</p>
+                        <p>Robert Downey Jr., Gwyneth Paltrow, Don Cheadle</p>
+                    </div>
+                    <div>
+                        <p class="text-gray-400">Genres:</p>
+                        <p>Action, Adventure, Sci-Fi</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Movie Details Section -->
+    <section class="container mx-auto px-4 py-8">
+        <div class="flex flex-col md:flex-row gap-8">
+            <div class="md:w-2/3">
+                <h3 class="text-xl font-bold mb-4">About</h3>
+                <p class="text-gray-300 mb-6">
+                    When Tony Stark's world is torn apart by a formidable terrorist called the Mandarin, he starts an odyssey of rebuilding and retribution. Starring Robert Downey Jr., Gwyneth Paltrow, Don Cheadle.
+                </p>
+                
+                <div class="mb-6">
+                    <div class="flex flex-wrap gap-8">
+                        <div>
+                            <p class="text-gray-400">Director:</p>
+                            <p>Shane Black</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-400">Cast:</p>
+                            <p>Robert Downey Jr., Gwyneth Paltrow, Don Cheadle, Guy Pearce</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-400">Genres:</p>
+                            <p>Action, Adventure, Sci-Fi</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="md:w-1/3">
+                <h3 class="text-xl font-bold mb-4">More Info</h3>
+                <div class="space-y-4">
+                    <div>
+                        <p class="text-gray-400">Studio:</p>
+                        <p>Marvel Studios</p>
+                    </div>
+                    <div>
+                        <p class="text-gray-400">Release Date:</p>
+                        <p>May 3, 2013</p>
+                    </div>
+                    <div>
+                        <p class="text-gray-400">Budget:</p>
+                        <p>$200,000,000</p>
+                    </div>
+                    <div>
+                        <p class="text-gray-400">Revenue:</p>
+                        <p>$1,214,811,252</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black bg-opacity-90 py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between">
+                <div class="mb-6 md:mb-0">
+                    <h3 class="text-xl font-bold mb-4">CineStream</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-8">
+                    <div>
+                        <h4 class="text-gray-400 font-medium mb-2">Navigation</h4>
+                        <ul class="space-y-2">
+                            <li><a href="#" class="text-gray-400 hover:text-white">Home</a></li>
+                            <li><a href="#" class="text-gray-400 hover:text-white">Movies</a></li>
+                            <li><a href="#" class="text-gray-400 hover:text-white">TV Shows</a></li>
+                            <li><a href="#" class="text-gray-400 hover:text-white">New & Popular</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h4 class="text-gray-400 font-medium mb-2">Legal</h4>
+                        <ul class="space-y-2">
+                            <li><a href="#" class="text-gray-400 hover:text-white">Terms of Service</a></li>
+                            <li><a href="#" class="text-gray-400 hover:text-white">Privacy Policy</a></li>
+                            <li><a href="#" class="text-gray-400 hover:text-white">Cookie Preferences</a></li>
+                            <li><a href="#" class="text-gray-400 hover:text-white">Corporate Information</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h4 class="text-gray-400 font-medium mb-2">Help</h4>
+                        <ul class="space-y-2">
+                            <li><a href="#" class="text-gray-400 hover:text-white">FAQ</a></li>
+                            <li><a href="#" class="text-gray-400 hover:text-white">Contact Us</a></li>
+                            <li><a href="#" class="text-gray-400 hover:text-white">Feedback</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-800 mt-8 pt-6 text-center md:text-left">
+                <p class="text-gray-400 text-sm">© 2023 CineStream. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const playButton = document.getElementById('playButton');
+            const heroSection = document.getElementById('heroSection');
+            const videoContainer = document.getElementById('videoContainer');
+            const moviePlayer = document.getElementById('moviePlayer');
+            const tvToggle = document.getElementById('tvToggle');
+            const tvIcon = document.getElementById('tvIcon');
+            
+            // Play button click handler
+            playButton.addEventListener('click', function() {
+                // Set the video source
+                moviePlayer.src = 'https://vidsrc.net/embed/tt1300854/';
+                
+                // Turn TV on (show video player)
+                heroSection.classList.add('lights-off');
+                tvIcon.classList.add('tv-icon-on');
+            });
+            
+            // TV toggle button
+            tvToggle.addEventListener('click', function() {
+                heroSection.classList.toggle('lights-off');
+                
+                if (heroSection.classList.contains('lights-off')) {
+                    // If we're turning TV on, make sure player is loaded
+                    if (moviePlayer.src === '') {
+                        moviePlayer.src = 'https://vidsrc.net/embed/tt1300854/';
+                    }
+                    tvIcon.classList.add('tv-icon-on');
+                } else {
+                    tvIcon.classList.remove('tv-icon-on');
+                }
+            });
+            
+            // Responsive search bar
+            const searchInput = document.querySelector('input[type="text"]');
+            const searchButton = document.querySelector('.fa-search').parentElement;
+            
+            searchButton.addEventListener('click', function() {
+                if (window.innerWidth < 768) {
+                    searchInput.classList.toggle('w-0');
+                    searchInput.classList.toggle('w-48');
+                    searchInput.classList.toggle('opacity-0');
+                    searchInput.classList.toggle('opacity-100');
+                    searchInput.focus();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
