@@ -38,7 +38,7 @@
             display: none;
             z-index: 20;
             box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
-            border-radius: 8px;
+            border-radius: 8px 8px 0 0;
         }
         
         .video-container iframe {
@@ -104,8 +104,8 @@
         }
         
         .tv-toggle {
-            position: absolute;
-            top: 20px;
+            position: fixed;
+            top: 90px;
             right: 20px;
             z-index: 100;
             background: rgba(0, 0, 0, 0.7);
@@ -206,6 +206,92 @@
         .movie-details {
             flex: 1;
         }
+
+        /* Player selector styles */
+        .player-selector {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            max-width: 1000px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px;
+            border-radius: 0 0 8px 8px;
+            display: none;
+            z-index: 30;
+            margin-top: -1px; /* Remove gap */
+        }
+
+        .player-options {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .player-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .player-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .player-btn.active {
+            background: #e50914;
+            border-color: #e50914;
+        }
+
+        .player-controls {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            max-width: 1000px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            z-index: 30;
+            display: none;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 0 0 8px 8px;
+            margin-top: -1px; /* Remove gap */
+        }
+
+        .player-error-text {
+            color: #ff6b6b;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .choose-player-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .choose-player-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .choose-player-btn i {
+            margin-left: 5px;
+        }
     </style>
 </head>
 <body class="bg-gray-900 text-white">
@@ -273,7 +359,23 @@
         
         <!-- Video Player (hidden initially) -->
         <div class="video-container" id="videoContainer">
-            <iframe id="moviePlayer", src="" allowfullscreen></iframe>
+            <iframe id="moviePlayer" src="" allowfullscreen></iframe>
+        </div>
+        
+        <!-- Player controls (outside the video container) -->
+        <div class="player-controls" id="playerControls">
+            <span class="player-error-text">Media not loading? Try another player</span>
+            <button class="choose-player-btn" id="choosePlayerBtn">
+                Choose Player <i class="fas fa-caret-down"></i>
+            </button>
+        </div>
+        
+        <div class="player-selector" id="playerSelector">
+            <div class="player-options">
+                <button class="player-btn active" data-player="1">Player 1</button>
+                <button class="player-btn" data-player="2">Player 2</button>
+                <button class="player-btn" data-player="3">Player 3</button>
+            </div>
         </div>
     </section>
 
@@ -287,39 +389,30 @@
                 <div class="flex justify-between items-center mb-4">
                     <div>
                         <h2 class="text-2xl font-bold">Iron Man 3</h2>
-                        <p class="text-gray-400">2h 10m • 2013 • PG-13</p>
-                    </div>
-                    <div class="flex space-x-4">
-                        <button class="bg-gray-800 bg-opacity-70 p-2 rounded-full hover:bg-opacity-100 transition">
-                            <i class="fas fa-plus"></i>
-                        </button>
-                        <button class="bg-gray-800 bg-opacity-70 p-2 rounded-full hover:bg-opacity-100 transition">
-                            <i class="fas fa-share-alt"></i>
-                        </button>
-                        <button class="bg-gray-800 bg-opacity-70 p-2 rounded-full hover:bg-opacity-100 transition">
-                            <i class="fas fa-thumbs-up"></i>
-                        </button>
-                    </div>
-                </div>
-                <p class="text-gray-300 mb-4">
-                    When Tony Stark's world is torn apart by a formidable terrorist called the Mandarin, he starts an odyssey of rebuilding and retribution. Starring Robert Downey Jr., Gwyneth Paltrow, Don Cheadle.
-                </p>
-                <div class="flex flex-wrap gap-4">
-                    <div>
-                        <p class="text-gray-400">Director:</p>
-                        <p>Shane Black</p>
-                    </div>
-                    <div>
-                        <p class="text-gray-400">Cast:</p>
-                        <p>Robert Downey Jr., Gwyneth Paltrow, Don Cheadle</p>
-                    </div>
-                    <div>
-                        <p class="text-gray-400">Genres:</p>
-                        <p>Action, Adventure, Sci-Fi</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <p class="text-gray-400">2h 10m • 2013 • PG-13</p>
+      </div>
+      <div class="flex space-x-4">
+      </div>
+    </div>
+    <p class="text-gray-300 mb-4">
+      When Tony Stark's world is torn apart by a formidable terrorist called the Mandarin, he starts an odyssey of rebuilding and retribution. Starring Robert Downey Jr., Gwyneth Paltrow, Don Cheadle.
+    </p>
+    <div class="flex flex-wrap gap-4">
+      <div>
+        <p class="text-gray-400">Director:</p>
+        <p>Shane Black</p>
+      </div>
+      <div>
+        <p class="text-gray-400">Cast:</p>
+        <p>Robert Downey Jr., Gwyneth Paltrow, Don Cheadle</p>
+      </div>
+      <div>
+        <p class="text-gray-400">Genres:</p>
+        <p>Action, Adventure, Sci-Fi</p>
+      </div>
+    </div>
+  </div>
+</div>
     </section>
 
     <!-- Movie Details Section -->
@@ -366,62 +459,62 @@
                     </div>
                     <div>
                         <p class="text-gray-400">Revenue:</p>
-                        <p>$1,214,811,252</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <p>$1,214,811,252</p>
+      </div>
+    </div>
+  </div>
+</div>
     </section>
 
     <!-- Footer -->
     <footer class="bg-black bg-opacity-90 py-8">
         <div class="container mx-auto px-4">
-            <div class="flex flex-col md:flex-row justify-between">
-                <div class="mb-6 md:mb-0">
-                    <h3 class="text-xl font-bold mb-4">CineStream</h3>
-                    <div class="flex space-x-4">
-                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>
-                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-instagram"></i></a>
-                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-youtube"></i></a>
-                    </div>
+        <div class="flex flex-col md:flex-row justify-between">
+            <div class="mb-6 md:mb-0">
+                <h3 class="text-xl font-bold mb-4">CineStream</h3>
+                <div class="flex space-x-4">
+                    <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-8">
+                <div>
+                    <h4 class="text-gray-400 font-medium mb-2">Navigation</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white">Home</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Movies</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">TV Shows</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">New & Popular</a></li>
+                    </ul>
                 </div>
                 
-                <div class="grid grid-cols-2 md:grid-cols-3 gap-8">
-                    <div>
-                        <h4 class="text-gray-400 font-medium mb-2">Navigation</h4>
-                        <ul class="space-y-2">
-                            <li><a href="#" class="text-gray-400 hover:text-white">Home</a></li>
-                            <li><a href="#" class="text-gray-400 hover:text-white">Movies</a></li>
-                            <li><a href="#" class="text-gray-400 hover:text-white">TV Shows</a></li>
-                            <li><a href="#" class="text-gray-400 hover:text-white">New & Popular</a></li>
-                        </ul>
-                    </div>
-                    
-                    <div>
-                        <h4 class="text-gray-400 font-medium mb-2">Legal</h4>
-                        <ul class="space-y-2">
-                            <li><a href="#" class="text-gray-400 hover:text-white">Terms of Service</a></li>
-                            <li><a href="#" class="text-gray-400 hover:text-white">Privacy Policy</a></li>
-                            <li><a href="#" class="text-gray-400 hover:text-white">Cookie Preferences</a></li>
-                            <li><a href="#" class="text-gray-400 hover:text-white">Corporate Information</a></li>
-                        </ul>
-                    </div>
-                    
-                    <div>
-                        <h4 class="text-gray-400 font-medium mb-2">Help</h4>
-                        <ul class="space-y-2">
-                            <li><a href="#" class="text-gray-400 hover:text-white">FAQ</a></li>
-                            <li><a href="#" class="text-gray-400 hover:text-white">Contact Us</a></li>
-                            <li><a href="#" class="text-gray-400 hover:text-white">Feedback</a></li>
-                        </ul>
-                    </div>
+                <div>
+                    <h4 class="text-gray-400 font-medium mb-2">Legal</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white">Terms of Service</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Privacy Policy</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Cookie Preferences</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Corporate Information</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-gray-400 font-medium mb-2">Help</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white">FAQ</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Contact Us</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Feedback</a></li>
+                    </ul>
                 </div>
             </div>
+        </div>
 
-            <div class="border-t border-gray-800 mt-8 pt-6 text-center md:text-left">
-                <p class="text-gray-400 text-sm">© 2023 CineStream. All rights reserved.</p>
-            </div>
+        <div class="border-t border-gray-800 mt-8 pt-6 text-center md:text-left">
+            <p class="text-gray-400 text-sm">© 2023 CineStream. All rights reserved.</p>
+        </div>
         </div>
     </footer>
 
@@ -433,15 +526,34 @@
             const moviePlayer = document.getElementById('moviePlayer');
             const tvToggle = document.getElementById('tvToggle');
             const tvIcon = document.getElementById('tvIcon');
+            const playerControls = document.getElementById('playerControls');
+            const choosePlayerBtn = document.getElementById('choosePlayerBtn');
+            const playerSelector = document.getElementById('playerSelector');
+            const playerBtns = document.querySelectorAll('.player-btn');
+            
+            // Player URLs
+            const players = {
+                1: 'https://player.videasy.net/movie/68721?color=FFA500',
+                2: 'https://embed.su/embed/movie/tt1300854',
+                3: 'https://vidsrc.net/embed/movie?imdb=tt1300854&season=1'
+            };
+            
+            // Current player (default to Player 1)
+            let currentPlayer = 1;
             
             // Play button click handler
             playButton.addEventListener('click', function() {
-                // Set the video source
-                moviePlayer.src = 'https://vidsrc.net/embed/tt1300854/';
+                // Set the default video source (Player 1)
+                moviePlayer.src = players[1];
                 
                 // Turn TV on (show video player)
                 heroSection.classList.add('lights-off');
                 tvIcon.classList.add('tv-icon-on');
+                
+                // Show player controls after a short delay
+                setTimeout(() => {
+                    playerControls.style.display = 'flex';
+                }, 500);
             });
             
             // TV toggle button
@@ -451,11 +563,65 @@
                 if (heroSection.classList.contains('lights-off')) {
                     // If we're turning TV on, make sure player is loaded
                     if (moviePlayer.src === '') {
-                        moviePlayer.src = 'https://vidsrc.net/embed/tt1300854/';
+                        moviePlayer.src = players[currentPlayer];
                     }
                     tvIcon.classList.add('tv-icon-on');
+                    
+                    // Show player controls
+                    setTimeout(() => {
+                        playerControls.style.display = 'flex';
+                    }, 500);
                 } else {
                     tvIcon.classList.remove('tv-icon-on');
+                    playerControls.style.display = 'none';
+                    playerSelector.style.display = 'none';
+                }
+            });
+            
+            // Choose player button click handler
+            choosePlayerBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                playerSelector.style.display = playerSelector.style.display === 'block' ? 'none' : 'block';
+                
+                // Change caret icon
+                const icon = this.querySelector('i');
+                if (playerSelector.style.display === 'block') {
+                    icon.classList.remove('fa-caret-down');
+                    icon.classList.add('fa-caret-up');
+                } else {
+                    icon.classList.remove('fa-caret-up');
+                    icon.classList.add('fa-caret-down');
+                }
+            });
+            
+            // Player selection handler
+            playerBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const playerNum = this.dataset.player;
+                    currentPlayer = playerNum;
+                    
+                    // Update active state
+                    playerBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Change player source
+                    moviePlayer.src = players[playerNum];
+                    
+                    // Close selector
+                    playerSelector.style.display = 'none';
+                    choosePlayerBtn.querySelector('i').classList.remove('fa-caret-up');
+                    choosePlayerBtn.querySelector('i').classList.add('fa-caret-down');
+                });
+            });
+            
+            // Close player selector when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!playerSelector.contains(e.target) && e.target !== choosePlayerBtn) {
+                    playerSelector.style.display = 'none';
+                    if (choosePlayerBtn.querySelector('i')) {
+                        choosePlayerBtn.querySelector('i').classList.remove('fa-caret-up');
+                        choosePlayerBtn.querySelector('i').classList.add('fa-caret-down');
+                    }
                 }
             });
             
