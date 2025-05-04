@@ -103,7 +103,7 @@
             display: block;
         }
         
-        .tv-toggle {
+        .close-toggle {
             position: fixed;
             top: 90px;
             right: 20px;
@@ -116,97 +116,15 @@
             justify-content: center;
             align-items: center;
             cursor: pointer;
+            display: none; /* Hidden by default */
+            transition: all 0.3s ease;
         }
         
-        /* Custom TV icon animation */
-        .tv-icon {
-            position: relative;
-            width: 20px;
-            height: 16px;
-            background: #fff;
-            border-radius: 2px;
+        .close-toggle:hover {
+            background: rgba(229, 9, 20, 0.9);
+            transform: scale(1.1);
         }
         
-        .tv-icon:before {
-            content: '';
-            position: absolute;
-            top: -4px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 8px;
-            height: 2px;
-            background: #fff;
-            border-radius: 2px 2px 0 0;
-        }
-        
-        .tv-icon:after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 12px;
-            height: 2px;
-            background: #fff;
-            border-radius: 0 0 2px 2px;
-        }
-        
-        .tv-icon-on {
-            animation: tvStatic 0.2s infinite alternate;
-        }
-        
-        @keyframes tvStatic {
-            0% { opacity: 0.8; }
-            100% { opacity: 1; }
-        }
-        
-        /* Custom movie poster frame */
-        .movie-poster-frame {
-            border: 4px solid #2d3748;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            overflow: hidden;
-            width: 120px;
-            height: 180px;
-        }
-        
-        .movie-poster {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.3s ease;
-            border-radius: 8px;
-        }
-        
-        .movie-poster:hover {
-            transform: scale(1.03);
-        }
-        
-        /* Hero content adjustments */
-        .hero-content {
-            position: relative;
-            z-index: 10;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 0 4px;
-        }
-        
-        /* Movie info flex layout */
-        .movie-info-container {
-            display: flex;
-            align-items: flex-start;
-            gap: 20px;
-            width: 100%;
-        }
-        
-        .movie-details {
-            flex: 1;
-        }
-
         /* Player selector styles */
         .player-selector {
             position: fixed;
@@ -228,6 +146,7 @@
             justify-content: center;
             gap: 15px;
             flex-wrap: wrap;
+            position: relative;
         }
 
         .player-btn {
@@ -292,31 +211,255 @@
         .choose-player-btn i {
             margin-left: 5px;
         }
+
+        /* Navigation link hover effect */
+        .nav-link {
+            transition: color 0.2s ease;
+        }
+        
+        .nav-link:hover {
+            color: #e50914 !important;
+        }
+
+        /* Close button for player selector */
+        .close-player-selector {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: #e50914;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 40;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .close-player-selector i {
+            font-size: 12px;
+        }
+
+        /* Download dropdown styles */
+        .download-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .download-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .download-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .download-content {
+            display: none;
+            position: absolute;
+            background-color: #1a202c;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            border-radius: 8px;
+            overflow: hidden;
+            right: 0;
+        }
+
+        .download-content a {
+            color: white;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            transition: background-color 0.3s;
+            font-size: 14px;
+        }
+
+        .download-content a:hover {
+            background-color: #2d3748;
+        }
+
+        .download-dropdown:hover .download-content {
+            display: block;
+        }
+
+        /* Action buttons container */
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        /* Quality indicator */
+        .quality-badge {
+            font-size: 10px;
+            background: #4CAF50;
+            color: white;
+            padding: 2px 5px;
+            border-radius: 3px;
+            margin-left: 5px;
+        }
+
+        /* Language indicator */
+        .language-badge {
+            font-size: 10px;
+            background: #2196F3;
+            color: white;
+            padding: 2px 5px;
+            border-radius: 3px;
+            margin-left: 5px;
+        }
+        
+        /* Custom movie poster frame */
+        .movie-poster-frame {
+            border: 4px solid #2d3748;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            overflow: hidden;
+            width: 120px;
+            height: 180px;
+        }
+        
+        .movie-poster {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+            border-radius: 8px;
+        }
+        
+        .movie-poster:hover {
+            transform: scale(1.03);
+        }
+        
+        /* Hero content adjustments */
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 4px;
+        }
+        
+        /* Movie info flex layout */
+        .movie-info-container {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            width: 100%;
+        }
+        
+        .movie-details {
+            flex: 1;
+        }
+
+        /* Mobile menu styles */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 70px;
+            left: 0;
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            z-index: 40;
+            padding: 20px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .mobile-menu.active {
+            display: block;
+        }
+
+        .mobile-menu a {
+            display: block;
+            padding: 12px 0;
+            color: white;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .mobile-menu a:last-child {
+            border-bottom: none;
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+
+            .desktop-nav {
+                display: none;
+            }
+        }
+
+        /* Search icon styles */
+        .search-icon {
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .search-icon:hover {
+            color: #e50914;
+            transform: scale(1.1);
+        }
     </style>
 </head>
 <body class="bg-gray-900 text-white">
     <!-- Navigation -->
     <nav class="bg-black bg-opacity-90 fixed w-full z-50">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
-            <div class="flex items-center space-x-8">
+            <div class="flex items-center space-x-4 md:space-x-8">
                 <a href="#" class="text-red-600 font-bold text-2xl">CineStream</a>
-                <div class="hidden md:flex space-x-6">
-                    <a href="#" class="hover:text-gray-300">Home</a>
-                    <a href="#" class="hover:text-gray-300">Movies</a>
-                    <a href="#" class="hover:text-gray-300">TV Shows</a>
-                    <a href="#" class="hover:text-gray-300">New & Popular</a>
-                    <a href="#" class="hover:text-gray-300">My List</a>
+                
+                <!-- Desktop Navigation -->
+                <div class="desktop-nav hidden md:flex space-x-6">
+                    <a href="/" class="nav-link hover:text-gray-300">Home</a>
+                    <a href="/Movies" class="nav-link hover:text-gray-300">Movies</a>
+                    <a href="/TVShows" class="nav-link hover:text-gray-300">TV Shows</a>
+                    <a href="/NewandPopular" class="nav-link hover:text-gray-300">New & Popular</a>
+                    <a href="/MyList" class="nav-link hover:text-gray-300">My List</a>
                 </div>
-            </div>
+            </div> 
+            
             <div class="flex items-center space-x-4">
-                <div class="relative">
-                    <input type="text" placeholder="Search" class="bg-gray-800 px-4 py-1 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-red-500 w-0 md:w-48 transition-all duration-300 opacity-0 md:opacity-100">
-                    <button class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 md:hidden">
-                        <i class="fas fa-search"></i>
-                    </button>
-                </div>
+                <!-- Search Icon -->
+                <a href="/Search" class="search-icon">
+                    <i class="fas fa-search"></i>
+                </a>
+                
+                <!-- Mobile Menu Toggle -->
+                <button id="menuToggle" class="menu-toggle text-gray-300 hover:text-white md:hidden">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
                 <div class="flex items-center space-x-2">
-                    <button class="text-gray-300 hover:text-white">
+                    <button class="text-gray-300 hover:text-white hidden md:block">
                         <i class="fas fa-bell"></i>
                     </button>
                     <div class="w-8 h-8 rounded-full bg-red-600 flex items-center justify-center">
@@ -325,13 +468,26 @@
                 </div>
             </div>
         </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="mobile-menu">
+            <a href="/" class="nav-link">Home</a>
+            <a href="/Movies" class="nav-link">Movies</a>
+            <a href="/TVShows" class="nav-link">TV Shows</a>
+            <a href="/NewandPopular" class="nav-link">New & Popular</a>
+            <a href="/MyList" class="nav-link">My List</a>
+            <a href="/Search" class="nav-link"><i class="fas fa-search mr-2"></i>Search</a>
+            <a href="#" class="nav-link"><i class="fas fa-bell mr-2"></i>Notifications</a>
+            <a href="#" class="nav-link"><i class="fas fa-user mr-2"></i>Account</a>
+            <a href="#" class="nav-link"><i class="fas fa-cog mr-2"></i>Settings</a>
+        </div>
     </nav>
 
     <!-- Hero Section with Movie Poster -->
     <section class="hero-section" id="heroSection">
         <div class="hero-overlay"></div>
-        <div class="tv-toggle" id="tvToggle">
-            <div class="tv-icon" id="tvIcon"></div>
+        <div class="close-toggle" id="closeToggle">
+            <i class="fas fa-times text-white"></i>
         </div>
         
         <div class="hero-content">
@@ -355,6 +511,32 @@
             <div class="play-button" id="playButton">
                 <i class="fas fa-play text-3xl"></i>
             </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <div class="download-dropdown">
+                    <button class="download-btn">
+                        <i class="fas fa-download"></i> Download Movie
+                        <i class="fas fa-caret-down"></i>
+                    </button>
+                    <div class="download-content">
+                        <a href="#"><i class="fas fa-film mr-2"></i> 4K UHD <span class="quality-badge">Ultra HD</span></a>
+                        <a href="#"><i class="fas fa-film mr-2"></i> 1080p <span class="quality-badge">Full HD</span></a>
+                        <a href="#"><i class="fas fa-film mr-2"></i> 720p <span class="quality-badge">HD</span></a>
+                    </div>
+                </div>
+
+                <div class="download-dropdown">
+                    <button class="download-btn">
+                        <i class="fas fa-closed-captioning"></i> Download Subtitles
+                        <i class="fas fa-caret-down"></i>
+                    </button>
+                    <div class="download-content">
+                        <a href="#"><i class="fas fa-language mr-2"></i> English <span class="language-badge">EN</span></a>
+                        <a href="#"><i class="fas fa-language mr-2"></i> Malayalam <span class="language-badge">ML</span></a>
+                    </div>
+                </div>
+            </div>
         </div>
         
         <!-- Video Player (hidden initially) -->
@@ -372,6 +554,9 @@
         
         <div class="player-selector" id="playerSelector">
             <div class="player-options">
+                <div class="close-player-selector" id="closePlayerSelector">
+                    <i class="fas fa-times"></i>
+                </div>
                 <button class="player-btn active" data-player="1">Player 1</button>
                 <button class="player-btn" data-player="2">Player 2</button>
                 <button class="player-btn" data-player="3">Player 3</button>
@@ -387,31 +572,52 @@
             </div>
             <div class="movie-details">
                 <div class="flex justify-between items-center mb-4">
-                    <div>
-                        <h2 class="text-2xl font-bold">Iron Man 3</h2>
-        <p class="text-gray-400">2h 10m • 2013 • PG-13</p>
-      </div>
-      <div class="flex space-x-4">
-      </div>
+            <div>
+                <h2 class="text-2xl font-bold">Iron Man 3</h2>
+                <p class="text-gray-400">2h 10m • 2013 • PG-13</p>
+            </div>
+            <div class="flex space-x-4">
+                <!-- Additional action buttons for mobile -->
+                <div class="download-dropdown md:hidden">
+                    <button class="download-btn">
+                        <i class="fas fa-download"></i>
+                    </button>
+                    <div class="download-content">
+                        <a href="#"><i class="fas fa-film mr-2"></i> 4K UHD <span class="quality-badge">Ultra HD</span></a>
+                        <a href="#"><i class="fas fa-film mr-2"></i> 1080p <span class="quality-badge">Full HD</span></a>
+                        <a href="#"><i class="fas fa-film mr-2"></i> 720p <span class="quality-badge">HD</span></a>
+                    </div>
+                </div>
+
+                <div class="download-dropdown md:hidden">
+                    <button class="download-btn">
+                        <i class="fas fa-closed-captioning"></i>
+                    </button>
+                    <div class="download-content">
+                        <a href="#"><i class="fas fa-language mr-2"></i> English <span class="language-badge">EN</span></a>
+                        <a href="#"><i class="fas fa-language mr-2"></i> Malayalam <span class="language-badge">ML</span></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p class="text-gray-300 mb-4">
+            When Tony Stark's world is torn apart by a formidable terrorist called the Mandarin, he starts an odyssey of rebuilding and retribution. Starring Robert Downey Jr., Gwyneth Paltrow, Don Cheadle.
+        </p>
+        <div class="flex flex-wrap gap-4">
+            <div>
+                <p class="text-gray-400">Director:</p>
+                <p>Shane Black</p>
+            </div>
+            <div>
+                <p class="text-gray-400">Cast:</p>
+                <p>Robert Downey Jr., Gwyneth Paltrow, Don Cheadle</p>
+            </div>
+            <div>
+                <p class="text-gray-400">Genres:</p>
+                <p>Action, Adventure, Sci-Fi</p>
+            </div>
+        </div>
     </div>
-    <p class="text-gray-300 mb-4">
-      When Tony Stark's world is torn apart by a formidable terrorist called the Mandarin, he starts an odyssey of rebuilding and retribution. Starring Robert Downey Jr., Gwyneth Paltrow, Don Cheadle.
-    </p>
-    <div class="flex flex-wrap gap-4">
-      <div>
-        <p class="text-gray-400">Director:</p>
-        <p>Shane Black</p>
-      </div>
-      <div>
-        <p class="text-gray-400">Cast:</p>
-        <p>Robert Downey Jr., Gwyneth Paltrow, Don Cheadle</p>
-      </div>
-      <div>
-        <p class="text-gray-400">Genres:</p>
-        <p>Action, Adventure, Sci-Fi</p>
-      </div>
-    </div>
-  </div>
 </div>
     </section>
 
@@ -421,8 +627,8 @@
             <div class="md:w-2/3">
                 <h3 class="text-xl font-bold mb-4">About</h3>
                 <p class="text-gray-300 mb-6">
-                    When Tony Stark's world is torn apart by a formidable terrorist called the Mandarin, he starts an odyssey of rebuilding and retribution. Starring Robert Downey Jr., Gwyneth Paltrow, Don Cheadle.
-                </p>
+            When Tony Stark's world is torn apart by a formidable terrorist called the Mandarin, he starts an odyssey of rebuilding and retribution. Starring Robert Downey Jr., Gwyneth Paltrow, Don Cheadle.
+        </p>
                 
                 <div class="mb-6">
                     <div class="flex flex-wrap gap-8">
@@ -451,14 +657,14 @@
                     </div>
                     <div>
                         <p class="text-gray-400">Release Date:</p>
-                        <p>May 3, 2013</p>
-                    </div>
-                    <div>
-                        <p class="text-gray-400">Budget:</p>
-                        <p>$200,000,000</p>
-                    </div>
-                    <div>
-                        <p class="text-gray-400">Revenue:</p>
+        <p>May 3, 2013</p>
+      </div>
+      <div>
+        <p class="text-gray-400">Budget:</p>
+        <p>$200,000,000</p>
+      </div>
+      <div>
+        <p class="text-gray-400">Revenue:</p>
         <p>$1,214,811,252</p>
       </div>
     </div>
@@ -469,52 +675,53 @@
     <!-- Footer -->
     <footer class="bg-black bg-opacity-90 py-8">
         <div class="container mx-auto px-4">
-        <div class="flex flex-col md:flex-row justify-between">
-            <div class="mb-6 md:mb-0">
-                <h3 class="text-xl font-bold mb-4">CineStream</h3>
-                <div class="flex space-x-4">
-                    <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>
-                    <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-instagram"></i></a>
-                    <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-youtube"></i></a>
-                </div>
-            </div>
-            
-            <div class="grid grid-cols-2 md:grid-cols-3 gap-8">
-                <div>
-                    <h4 class="text-gray-400 font-medium mb-2">Navigation</h4>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="text-gray-400 hover:text-white">Home</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white">Movies</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white">TV Shows</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white">New & Popular</a></li>
-                    </ul>
+            <div class="flex flex-col md:flex-row justify-between">
+                <div class="mb-6 md:mb-0">
+                    <h3 class="text-xl font-bold mb-4">CineStream</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-youtube"></i></a>
+                    </div>
                 </div>
                 
-                <div>
-                    <h4 class="text-gray-400 font-medium mb-2">Legal</h4>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="text-gray-400 hover:text-white">Terms of Service</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white">Privacy Policy</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white">Cookie Preferences</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white">Corporate Information</a></li>
-                    </ul>
-                </div>
-                
-                <div>
-                    <h4 class="text-gray-400 font-medium mb-2">Help</h4>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="text-gray-400 hover:text-white">FAQ</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white">Contact Us</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white">Feedback</a></li>
-                    </ul>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-8">
+                    <div>
+                        <h4 class="text-gray-400 font-medium mb-2">Navigation</h4>
+                        <ul class="space-y-2">
+                            <li><a href="/" class="text-gray-400 hover:text-white">Home</a></li>
+                            <li><a href="/Movies" class="text-gray-400 hover:text-white">Movies</a></li>
+                            <li><a href="/TVShows" class="text-gray-400 hover:text-white">TV Shows</a></li>
+                            <li><a href="/NewandPopular" class="text-gray-400 hover:text-white">New & Popular</a></li>
+                            <li><a href="/Search" class="text-gray-400 hover:text-white">Search</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h4 class="text-gray-400 font-medium mb-2">Legal</h4>
+                        <ul class="space-y-2">
+                            <li><a href="/TermsofService" class="text-gray-400 hover:text-white">Terms of Service</a></li>
+                            <li><a href="/PrivacyPolicy" class="text-gray-400 hover:text-white">Privacy Policy</a></li>
+                            <li><a href="/CookiePreferences" class="text-gray-400 hover:text-white">Cookie Preferences</a></li>
+                            <li><a href="/CorporateInformation" class="text-gray-400 hover:text-white">Corporate Information</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h4 class="text-gray-400 font-medium mb-2">Help</h4>
+                        <ul class="space-y-2">
+                            <li><a href="/FAQ" class="text-gray-400 hover:text-white">FAQ</a></li>
+                            <li><a href="/ContactUs" class="text-gray-400 hover:text-white">Contact Us</a></li>
+                            <li><a href="/Feedback" class="text-gray-400 hover:text-white">Feedback</a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="border-t border-gray-800 mt-8 pt-6 text-center md:text-left">
-            <p class="text-gray-400 text-sm">© 2023 CineStream. All rights reserved.</p>
-        </div>
+            <div class="border-t border-gray-8 mt-8 pt-6 text-center md:text-left">
+                <p class="text-gray-400 text-sm">© 2023 CineStream. All rights reserved.</p>
+            </div>
         </div>
     </footer>
 
@@ -524,12 +731,16 @@
             const heroSection = document.getElementById('heroSection');
             const videoContainer = document.getElementById('videoContainer');
             const moviePlayer = document.getElementById('moviePlayer');
-            const tvToggle = document.getElementById('tvToggle');
-            const tvIcon = document.getElementById('tvIcon');
+            const closeToggle = document.getElementById('closeToggle');
             const playerControls = document.getElementById('playerControls');
             const choosePlayerBtn = document.getElementById('choosePlayerBtn');
             const playerSelector = document.getElementById('playerSelector');
             const playerBtns = document.querySelectorAll('.player-btn');
+            const closePlayerSelector = document.getElementById('closePlayerSelector');
+            
+            // Mobile menu elements
+            const menuToggle = document.getElementById('menuToggle');
+            const mobileMenu = document.getElementById('mobileMenu');
             
             // Player URLs
             const players = {
@@ -548,7 +759,7 @@
                 
                 // Turn TV on (show video player)
                 heroSection.classList.add('lights-off');
-                tvIcon.classList.add('tv-icon-on');
+                closeToggle.style.display = 'flex'; // Show close toggle button
                 
                 // Show player controls after a short delay
                 setTimeout(() => {
@@ -556,26 +767,15 @@
                 }, 500);
             });
             
-            // TV toggle button
-            tvToggle.addEventListener('click', function() {
-                heroSection.classList.toggle('lights-off');
+            // Close toggle button
+            closeToggle.addEventListener('click', function() {
+                heroSection.classList.remove('lights-off');
+                playerControls.style.display = 'none';
+                playerSelector.style.display = 'none';
+                closeToggle.style.display = 'none'; // Hide close toggle button when player is closed
                 
-                if (heroSection.classList.contains('lights-off')) {
-                    // If we're turning TV on, make sure player is loaded
-                    if (moviePlayer.src === '') {
-                        moviePlayer.src = players[currentPlayer];
-                    }
-                    tvIcon.classList.add('tv-icon-on');
-                    
-                    // Show player controls
-                    setTimeout(() => {
-                        playerControls.style.display = 'flex';
-                    }, 500);
-                } else {
-                    tvIcon.classList.remove('tv-icon-on');
-                    playerControls.style.display = 'none';
-                    playerSelector.style.display = 'none';
-                }
+                // Pause the video when closing
+                moviePlayer.src = '';
             });
             
             // Choose player button click handler
@@ -592,6 +792,14 @@
                     icon.classList.remove('fa-caret-up');
                     icon.classList.add('fa-caret-down');
                 }
+            });
+            
+            // Close player selector button
+            closePlayerSelector.addEventListener('click', function(e) {
+                e.stopPropagation();
+                playerSelector.style.display = 'none';
+                choosePlayerBtn.querySelector('i').classList.remove('fa-caret-up');
+                choosePlayerBtn.querySelector('i').classList.add('fa-caret-down');
             });
             
             // Player selection handler
@@ -625,17 +833,34 @@
                 }
             });
             
-            // Responsive search bar
-            const searchInput = document.querySelector('input[type="text"]');
-            const searchButton = document.querySelector('.fa-search').parentElement;
+            // Mobile menu toggle
+            menuToggle.addEventListener('click', function(e) {
+                e.stopPropagation();
+                
+                // Toggle menu
+                mobileMenu.classList.toggle('active');
+                
+                // Change icon between bars and times
+                const icon = this.querySelector('i');
+                if (mobileMenu.classList.contains('active')) {
+                    icon.classList.remove('fa-bars');
+                    icon.classList.add('fa-times');
+                } else {
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                }
+            });
             
-            searchButton.addEventListener('click', function() {
-                if (window.innerWidth < 768) {
-                    searchInput.classList.toggle('w-0');
-                    searchInput.classList.toggle('w-48');
-                    searchInput.classList.toggle('opacity-0');
-                    searchInput.classList.toggle('opacity-100');
-                    searchInput.focus();
+            // Close mobile menu when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!mobileMenu.contains(e.target) && e.target !== menuToggle) {
+                    mobileMenu.classList.remove('active');
+                    
+                    // Reset icon if needed
+                    if (menuToggle.querySelector('i').classList.contains('fa-times')) {
+                        menuToggle.querySelector('i').classList.remove('fa-times');
+                        menuToggle.querySelector('i').classList.add('fa-bars');
+                    }
                 }
             });
         });
